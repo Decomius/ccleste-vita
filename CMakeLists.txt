@@ -59,7 +59,7 @@ target_link_libraries(${PROJECT_NAME}
   vita2d
   SDL2_mixer
   SDL2
-  flac
+  FLAC
   vorbisfile
   vorbis
   ogg
