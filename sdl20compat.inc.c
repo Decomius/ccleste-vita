@@ -11,15 +11,17 @@ static SDL_Surface* sdl2_screen = NULL;
 static SDL_Texture* sdl2_screen_tex = NULL;
 static SDL_Window* sdl2_window = NULL;
 static SDL_Renderer* sdl2_rendr = NULL;
+//vita port - rect to make it render unstretched 
+SDL_Rect VS = {128, 0, 128*2,128*4};
+
 static SDL_Surface *SDL_SetVideoMode(int width, int height, int bpp, Uint32 flags) {
   if (!sdl2_window) {
-    sdl2_window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_RESIZABLE);
+    sdl2_window = SDL_CreateWindow("", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, 0);
     if (!sdl2_window) goto die;
-    sdl2_rendr = SDL_CreateRenderer(sdl2_window, -1, 0);
+    sdl2_rendr = SDL_CreateRenderer(sdl2_window, -1, SDL_RENDERER_ACCELERATED);
     SDL_RenderSetLogicalSize(sdl2_rendr, width, height);
     if (!sdl2_rendr) goto die;
     sdl2_screen_tex = SDL_CreateTexture(sdl2_rendr, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, width, height);
-
     if (0) {
     die:
       if (sdl2_window) SDL_DestroyWindow(sdl2_window);
@@ -73,7 +75,7 @@ static void SDL_Flip(SDL_Surface* screen) {
   SDL_UpdateTexture(sdl2_screen_tex, NULL, screen->pixels, screen->pitch);
   SDL_SetRenderDrawColor(sdl2_rendr, 0, 0, 0, 255);
   SDL_RenderClear(sdl2_rendr);
-  SDL_RenderCopy(sdl2_rendr, sdl2_screen_tex, NULL, NULL);
+  SDL_RenderCopy(sdl2_rendr, sdl2_screen_tex, NULL, &VS);
   SDL_RenderPresent(sdl2_rendr);
 }
 

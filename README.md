@@ -31,20 +31,20 @@ devkitARM
 
 # Controls
 
-|PC                |3DS                |Action              |
-|:----------------:|:-----------------:|-------------------:|
-|LEFT              |LEFT               | Move left          |
-|RIGHT             |RIGHT              | Move right         |
-|DOWN              |DOWN               | Look down          |
-|UP                |UP                 | Look up            |
-|Z/C               |A                  | Jump               |
-|X/V               |B/X                | Dash               |
-|ESCAPE            |START              | Pause              |
-|E                 |L+R                | Toggle screenshake |
-|SHIFT+D           |Y+L                | Load state         |
-|SHIFT+S           |Y+R                | Save state         |
-|Hold F9           |Hold SELECT+START+Y| Reset              |
-|F11               |SELECT             | Fullscreen         |
+|PC                |3DS                |VITA                |Action              |
+|:----------------:|:-----------------:|-------------------:|-------------------:|
+|LEFT              |LEFT               |LEFT                | Move left          |
+|RIGHT             |RIGHT              |RIGHT               | Move right         |
+|DOWN              |DOWN               |DOWN                | Look down          |
+|UP                |UP                 |UP                  | Look up            |
+|Z/C               |A                  |CROSS               | Jump               |
+|X/V               |B/X                |SQUARE              | Dash               |
+|ESCAPE            |START              |START               | Pause              |
+|E                 |L+R                |TRIANGLE            | Toggle screenshake |
+|SHIFT+D           |Y+L                |L                   | Load state         |
+|SHIFT+S           |Y+R                |R                   | Save state         |
+|Hold F9           |Hold SELECT+START+Y|Hold START          | Reset              |
+|F11               |SELECT             |SELECT              | Fullscreen         |
 
 Controller input is also supported on PC (SDL2 ver) and web version. The controller must be plugged in when opening the game.
 The default mappings are: jump with A and dash with B (xbox360 controller layout), move with d-pad or the left stick, pause with start, save/load state with left/right shoulder, exit with guide (logo button).
@@ -72,7 +72,12 @@ Using make you can turn on this feature with `make HACKED_BALLOONS=1`.
 
 You can combine both of these with `make HACKED_BALLOONS=1 USE_FIXEDP=1`.
 
-# credits
+# Vita port Credits
+Thanks to GuilhermeSouza, Calistex, VitaSDK & Vita Nuova Discord Server for helping either directly with code or indirectly.
+lemon32767 for making the original ccleste.
+Original developers for making this cool game.
+
+# Original  credits
 
 Sound wave files are taken from [https://github.com/JeffRuLz/Celeste-Classic-GBA/tree/master/maxmod_data](https://github.com/JeffRuLz/Celeste-Classic-GBA/tree/master/maxmod_data),
 music ogg files were obtained by converting the .wav dumps from pico 8, which I did using audacity & ffmpeg.

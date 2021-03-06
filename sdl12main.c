@@ -1,5 +1,5 @@
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 #if SDL_MAJOR_VERSION >= 2
 #include "sdl20compat.inc.c"
 #endif
@@ -380,6 +380,7 @@ enum {
 	PSEUDO_BTN_LOAD_STATE = 7,
 	PSEUDO_BTN_EXIT = 8,
 	PSEUDO_BTN_PAUSE = 9,
+	PSEUDO_BTN_SCREENSHAKE = 10
 };
 static void ReadGamepadInput(Uint16* out_buttons);
 #endif
@@ -393,9 +394,10 @@ static void mainLoop(void) {
 #ifdef _3DS
 			&& kbstate[SDLK_LSHIFT] && kbstate[SDLK_ESCAPE] && kbstate[SDLK_F11]
 #else
-			&& kbstate[SDLK_F9]
+			&&  (buttons_state >> PSEUDO_BTN_PAUSE) & 1
 #endif
 	) {
+		game_reset:
 		reset_input_timer++;
 		if (reset_input_timer >= 30) {
 			reset_input_timer=0;
@@ -419,6 +421,7 @@ static void mainLoop(void) {
 	if (!((prev_buttons_state >> PSEUDO_BTN_PAUSE) & 1)
 	 && (buttons_state >> PSEUDO_BTN_PAUSE) & 1) {
 		goto toggle_pause;
+		goto game_reset;
 	}
 
 	if (!((prev_buttons_state >> PSEUDO_BTN_EXIT) & 1)
@@ -435,6 +438,11 @@ static void mainLoop(void) {
 	 && (buttons_state >> PSEUDO_BTN_LOAD_STATE) & 1) {
 		goto load_state;
 	}
+
+	if (!((prev_buttons_state >> PSEUDO_BTN_SCREENSHAKE) & 1)
+	 && (buttons_state >> PSEUDO_BTN_SCREENSHAKE) & 1) {
+		goto toggle_screenshake;
+	}	
 #endif
 
 	SDL_Event ev;
@@ -450,12 +458,21 @@ static void mainLoop(void) {
 				paused = !paused;
 				break;
 			} else if (ev.key.keysym.sym == SDLK_DELETE) { //exit
-				press_exit:
+				//press_exit:
 				running = 0;
 				break;
 			} else if (ev.key.keysym.sym == SDLK_F11 && !(kbstate[SDLK_LSHIFT] || kbstate[SDLK_ESCAPE])) {
+				press_exit:
 				if (SDL_WM_ToggleFullScreen(screen)) { //this doesn't work on windows..
 					OSDset("toggle fullscreen");
+					if (VS.x != 0) {
+						VS.x = 0;
+						VS.w = PICO8_W*scale;
+						break;}
+					else if (VS.x == 0){
+						VS.x = 128;
+						VS.w = PICO8_W*2;
+						break;}
 				}
 				screen = SDL_GetVideoSurface();
 				break;
@@ -491,6 +508,7 @@ static void mainLoop(void) {
 					ev.key.keysym.sym == SDLK_e
 #endif
 					) {
+				toggle_screenshake:
 				enable_screenshake = !enable_screenshake;
 				OSDset("screenshake: %s", enable_screenshake ? "on" : "off");
 			} break;
@@ -950,7 +968,7 @@ struct mapping {
 	Uint16 pico8_btn;
 };
 static const char* pico8_btn_names[] = {
-	"left", "right", "up", "down", "jump", "dash", "save", "load", "exit", "pause"
+	"left", "right", "up", "down", "jump", "dash", "save", "load", "exit", "pause", "screenshake"
 };
 
 // initialized with default mapping
@@ -960,12 +978,13 @@ static struct mapping controller_mappings[30] = {
 	{SDL_CONTROLLER_BUTTON_DPAD_UP,    2}, //up
 	{SDL_CONTROLLER_BUTTON_DPAD_DOWN,  3}, //down
 	{SDL_CONTROLLER_BUTTON_A,          4}, //jump
-	{SDL_CONTROLLER_BUTTON_B,          5}, //dash
+	{SDL_CONTROLLER_BUTTON_X,          5}, //dash
 
 	{SDL_CONTROLLER_BUTTON_LEFTSHOULDER,  PSEUDO_BTN_SAVE_STATE}, //save
 	{SDL_CONTROLLER_BUTTON_RIGHTSHOULDER, PSEUDO_BTN_LOAD_STATE}, //load
-	{SDL_CONTROLLER_BUTTON_GUIDE,         PSEUDO_BTN_EXIT}, //exit
+	{SDL_CONTROLLER_BUTTON_BACK,         PSEUDO_BTN_EXIT}, //change to fullscreen
 	{SDL_CONTROLLER_BUTTON_START,         PSEUDO_BTN_PAUSE}, //pause
+	{SDL_CONTROLLER_BUTTON_Y,         	 PSEUDO_BTN_SCREENSHAKE}, //screenshake
 	{0xff, 0xff}
 };
 static const Uint16 stick_deadzone = 32767 / 2; //about half

@@ -280,7 +280,7 @@ static inline bool solid_at(float x,float y,float w,float h) { return solid_at(i
 ////////////////////////////////////////////////
 
 // ~celeste~
-// matt thorson + noel berry
+// maddy thorson + noel berry
 
 // globals
 //////////////
@@ -1886,8 +1886,8 @@ void Celeste_P8_draw() {
    
 	// credits
 	if (is_title()) {
-		P8print("x+c",58,80,5);
-		P8print("matt thorson",42,96,5);
+		P8print("x+~",58,80,5);
+		P8print("maddy thorson",40,96,5);
 		P8print("noel berry",46,102,5);
 	}
    
