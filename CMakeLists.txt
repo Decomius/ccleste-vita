@@ -22,7 +22,7 @@ include("${VITASDK}/share/vita.cmake" REQUIRED)
 
 ## Configuration options for this app
 # Display name (under bubble in LiveArea)
-set(VITA_APP_NAME "CELESTE CLASSIC VITA")
+set(VITA_APP_NAME "Celeste Classic")
 # Unique ID must be exactly 9 characters. Recommended: XXXXYYYYY where X =
 # unique string of developer and Y = a unique number for this app
 set(VITA_TITLEID  "CCLESTVIT")

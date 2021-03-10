@@ -469,7 +469,7 @@ static void mainLoop(void) {
 						VS.x = 0;
 						VS.w = PICO8_W*scale;
 						break;}
-					else if (VS.x == 0){
+					else{
 						VS.x = 128;
 						VS.w = PICO8_W*2;
 						break;}
